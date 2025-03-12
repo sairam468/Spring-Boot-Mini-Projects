@@ -1,0 +1,24 @@
+# Eclipse Specific
+.classpath
+.project
+.settings/
+
+# Maven Specific
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# Gradle Specific
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# Logs and Temp Files
+*.log
+*.tmp
+.DS_Store
+Thumbs.db
