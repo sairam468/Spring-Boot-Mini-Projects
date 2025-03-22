@@ -1,5 +1,6 @@
 package com.sit.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -115,8 +116,9 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public Comment saveComment(Comment comment) {
 		
-		int uid=(int) session.getAttribute("userId");
-		User user = repo.findById(uid).get();
+		Post p = comment.getPost();
+		User user = p.getUser();
+		
 		comment.setUser(user);
 		Comment save = comRepo.save(comment);
 		return save;
@@ -128,6 +130,25 @@ public class UserServiceImpl implements UserService {
 		return list;
 	}
 
+	@Override
+	public List<Comment> findAllCommentsForUserPosts() {
+	    int uid = (int) session.getAttribute("userId"); // Get the userId from session
+	    User user = repo.findById(uid).orElse(null); // Fetch user from repo
+
+	    if (user == null) {
+	        return new ArrayList<>(); // Return an empty list if the user is not found
+	    }
+
+	    List<Post> posts = user.getPosts(); // Get all posts of the user
+	    List<Comment> allComments = new ArrayList<>();
+
+	    for (Post post : posts) {
+	        List<Comment> comments = comRepo.findAllByPost(post); // Get comments for each post
+	        allComments.addAll(comments);
+	    }
+
+	    return allComments; // Return all comments for all posts
+	}
 
 	@Override
 	public List<Comment> findByUser() {

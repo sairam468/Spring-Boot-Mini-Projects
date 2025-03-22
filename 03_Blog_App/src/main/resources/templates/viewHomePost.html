@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${post.title} + ' - Sai BLOG'"></title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .post-container {
+            max-width: 900px;
+            margin: 50px auto;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .post-title {
+            color: #343a40;
+            font-weight: bold;
+            font-size: 28px;
+        }
+
+        .post-description {
+            font-size: 18px;
+            font-style: italic;
+            color: #555;
+            margin-bottom: 15px;
+        }
+
+        .post-content {
+            margin-top: 20px;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .comment-container {
+            margin-top: 30px;
+        }
+
+        .comment {
+            background: #f1f1f1;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .comment-header {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .comment-footer {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .btn-reply {
+            font-size: 13px;
+            color: #007bff;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .back-link {
+            display: block;
+            margin-top: 20px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="/">Sai BLOG</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    </ul>
+                    <a href="/login" class="btn btn-primary">Login</a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Blog Post Details -->
+        <div class="post-container">
+            <h2 class="post-title" th:text="${post.title}"></h2>
+
+            <p class="post-description" th:text="${post.description}"></p>
+
+            <p class="text-muted">
+                <span th:if="${post.updatedOn == null or post.createdOn == post.updatedOn}">
+                    Created on: <span th:text="${post.createdOn}"></span>
+                </span> 
+                <span th:if="${post.updatedOn != null and post.createdOn != post.updatedOn}">
+                    Updated on: <span th:text="${post.updatedOn}"></span>
+                </span>
+            </p>
+
+            <hr>
+            <div class="post-content" th:utext="${post.content}"></div>
+
+            <!-- Comments Section -->
+            <div class="comment-container">
+                <h4>Comments</h4>
+                <div th:each="comment : ${comments}" class="comment">
+                    <p class="comment-header">
+                        <strong th:text="${comment.getName}"></strong> (<span th:text="${comment.getEMail}"></span>)
+                    </p>
+                    <p th:text="${comment.getContent}"></p>
+                    <p class="comment-footer">Posted on <span th:text="${comment.getCreatedOn}"></span></p>
+                    <button class="btn-reply">Reply</button>
+                </div>
+            </div>
+
+            <!-- Add Comment Form -->
+            <div class="mt-4">
+                <h4>Add a Comment</h4>
+                <form th:action="@{/post/{postId}/hcomment(postId=${post.getPId})}" method="post">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name:</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email:</label>
+                        <input type="email" class="form-control" id="email" name="eMail" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="content" class="form-label">Comment:</label>
+                        <textarea class="form-control" id="content" name="content" rows="3" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+
+            <a href="/" class="back-link">&larr; Back to Posts</a>
+        </div>
+    </div>
+
+    <!-- Bootstrap JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

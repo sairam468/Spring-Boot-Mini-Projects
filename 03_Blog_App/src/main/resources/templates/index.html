@@ -75,10 +75,10 @@
             <div class="list-group">
                 <div th:each="post : ${posts}" class="list-group-item blog-post">
                     <h5>
-                        <a th:href="@{/post/{id}(id=${post.pId})}" th:text="${post.title}" class="text-decoration-none"></a>
+                        <a th:href="@{/hpost/{id}(id=${post.pId})}" th:text="${post.title}" class="text-decoration-none"></a>
                     </h5>
                     <p th:text="${post.description}"></p>
-                    <a th:href="@{/post/{id}(id=${post.pId})}" class="btn btn-sm btn-outline-primary">Read More</a>
+                    <a th:href="@{/hpost/{id}(id=${post.pId})}" class="btn btn-sm btn-outline-primary">Read More</a>
                 </div>
             </div>
         </div>

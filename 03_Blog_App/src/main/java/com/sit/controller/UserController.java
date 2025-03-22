@@ -94,7 +94,7 @@ public class UserController {
 	@GetMapping("/comments")
 	public String comments(Map<String,Object> m) {
 		
-		List<Comment> byUser = service.findByUser();
+		List<Comment> byUser = service.findAllCommentsForUserPosts();
 		 m.put("comments", byUser);
 			
 		return "comments"; // This should match the name of your Thymeleaf template
@@ -138,6 +138,21 @@ public class UserController {
 
 		model.addAttribute("post", post);
 		return "openPost"; // Renders openPost.html
+
+	}
+	
+	@GetMapping("/hpost/{id}")
+	public String openHomePost(@PathVariable Integer id,Model model) {
+		Post post = service.getPostById(id);
+		if (post == null) {
+			return "redirect:/"; // Redirect if post not found
+		}
+		List<Comment> comments = service.findByPost(post);
+
+		model.addAttribute("comments", comments);
+
+		model.addAttribute("post", post);
+		return "viewHomePost"; // Renders openPost.html
 
 	}
 	
@@ -190,6 +205,26 @@ public class UserController {
 
 		if(saveComment!= null) {
 			return "redirect:/post/" + postId;
+		}
+		return null;
+	}
+	
+	@PostMapping("/post/{postId}/hcomment")
+	public String addHComment(@PathVariable Integer postId, @RequestParam String name, 
+			@RequestParam String eMail, @RequestParam String content) {
+		Post post = service.getPostById(postId);
+		if(post==null) {
+			throw new  RuntimeException("Post not found");
+		}
+		Comment comment = new Comment();
+		comment.setName(name);
+		comment.setEMail(eMail);
+		comment.setContent(content);
+		comment.setPost(post);
+		Comment saveComment = service.saveComment(comment);
+
+		if(saveComment!= null) {
+			return "redirect:/hpost/" + postId;
 		}
 		return null;
 	}

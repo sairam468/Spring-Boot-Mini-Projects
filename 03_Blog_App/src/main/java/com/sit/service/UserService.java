@@ -32,4 +32,6 @@ public interface UserService {
 	public List<Comment> findByUser();
 	
 	public void deleteCommentById(Integer id);
+	
+	public List<Comment> findAllCommentsForUserPosts();
 }
